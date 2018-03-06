@@ -2,6 +2,19 @@ import requests
 import pickle
 from pprint import pprint
 
+import configparser
+
+"""
+LOAD CONFIG FILE
+"""
+config = configparser.ConfigParser()
+config.read('data.conf')
+
+
+"""
+OBTAIN STOCK DATA
+"""
+
 
 """
 QUANDL - Basic stock data
