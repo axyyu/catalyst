@@ -4,12 +4,13 @@ import requests
 import pandas as pd
 import pickle
 import datetime
+import numpy as np
 
 """
 Globals
 """
-sector_map = []
-industry_map = []
+sector_map = {}
+industry_map = {}
 stock_list = []
 
 """
@@ -40,29 +41,29 @@ if not stock_list_file.is_file():
                 industry = i["industry"][n]
 
                 stock_list.append( Stock(ticker, sector, industry) )
-                if sector not in sector_map and if not np.isnan(sector):
+                if sector not in sector_map: # and not np.isnan(sector):
                     sector_map[len(sector_map)+1] = sector
-                if industry not in industry_map and if not np.isnan(industry):
+                if industry not in industry_map: # and not np.isnan(industry):
                     industry_map[len(industry_map)+1] = industry
 
     with open('stock_list.pickle', 'wb') as handle:
-        pickle.dump(stocklist, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(stock_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
     with open('sector_map.pickle', 'wb') as handle:
         pickle.dump(sector_map, handle, protocol=pickle.HIGHEST_PROTOCOL)
     with open('industry_map.pickle', 'wb') as handle:
         pickle.dump(industry_map, handle, protocol=pickle.HIGHEST_PROTOCOL)
 else:
-    with open('stock_list.pickle', 'wb') as handle:
+    with open('stock_list.pickle', 'rb') as handle:
         stock_list = pickle.load(handle)
-    with open('sector_map.pickle', 'wb') as handle:
+    with open('sector_map.pickle', 'rb') as handle:
         sector_map = ickle.load(handle)
-    with open('industry_map.pickle', 'wb') as handle:
+    with open('industry_map.pickle', 'rb') as handle:
         industry_map = ickle.load(handle)
 
 """
 Obtain Stock Prices
 """
-filename = datetime.datetime.now().strftime("%Y-%m-%d")
+filename = datetime.datetime.now().strftime("stock_data/%Y-%m-%d")
 batches = []
 count = 0
 while 100*count < len(stock_list):
@@ -76,7 +77,7 @@ for batch in batches:
         batch_string += b.ticker + ","
     batch_string.rstrip()
     r = requests.get('https://api.iextrading.com/1.0/stock/market/batch?symbols='
-        batch_string
+        +batch_string+
         '&range=1d&types=quote,news,chart'
     )
     for k,v in r.json().items():
