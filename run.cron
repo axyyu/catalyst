@@ -1,1 +1,1 @@
-00 2 * * * /usr/bin/python3 scraper.py
+30 23 * * 1-5 /usr/bin/python3 scraper.py
