@@ -5,6 +5,7 @@ import pandas as pd
 import pickle
 import datetime
 import numpy as np
+import gzip
 
 """
 Globals
@@ -63,7 +64,7 @@ else:
 """
 Obtain Stock Prices
 """
-filename = datetime.datetime.now().strftime("stock_data/%Y-%m-%d")
+filename = datetime.datetime.now().strftime("stock_data/%Y-%m-%d.pkl.gz")
 batches = []
 count = 0
 while 100*count < len(stock_list):
@@ -83,5 +84,5 @@ for batch in batches:
     for k,v in r.json().items():
         data[k] = v
 
-with open(filename, "wb") as f:
+with gzip.open(filename, "wb") as f:
     pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
