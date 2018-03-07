@@ -5,7 +5,11 @@ import pandas as pd
 import pickle
 import datetime
 import numpy as np
+<<<<<<< HEAD
 import time
+=======
+import gzip
+>>>>>>> 0233bbc581f9cb56df676cefd5de445f30437bc1
 
 """
 Globals
@@ -64,7 +68,12 @@ else:
 """
 Obtain Stock Prices
 """
-filename = datetime.datetime.now().strftime("stock_data/%Y-%m-%d")
+filename = datetime.datetime.now().strftime("stock_data/%Y-%m-%d.pkl.gz")
+batches = []
+count = 0
+while 100*count < len(stock_list):
+    stock_list[100*count:100*(count+1)]
+    count+=1
 
 data_file = Path("./stock_list.pickle")
 if not data_file.is_file() or True:
@@ -88,7 +97,7 @@ if not data_file.is_file() or True:
             data[k] = v
         time.sleep(.1)
 
-    with open(filename, "wb") as f:
+    with gzip.open(filename, "wb") as f:
         pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
 else:
     print("FILE ALREADY EXISTS")
