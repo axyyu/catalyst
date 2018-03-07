@@ -5,11 +5,8 @@ import pandas as pd
 import pickle
 import datetime
 import numpy as np
-<<<<<<< HEAD
 import time
-=======
 import gzip
->>>>>>> 0233bbc581f9cb56df676cefd5de445f30437bc1
 
 """
 Globals
