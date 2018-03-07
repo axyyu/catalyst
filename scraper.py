@@ -5,6 +5,7 @@ import pandas as pd
 import pickle
 import datetime
 import numpy as np
+import time
 
 """
 Globals
@@ -56,32 +57,38 @@ else:
     with open('stock_list.pickle', 'rb') as handle:
         stock_list = pickle.load(handle)
     with open('sector_map.pickle', 'rb') as handle:
-        sector_map = ickle.load(handle)
+        sector_map = pickle.load(handle)
     with open('industry_map.pickle', 'rb') as handle:
-        industry_map = ickle.load(handle)
+        industry_map = pickle.load(handle)
 
 """
 Obtain Stock Prices
 """
 filename = datetime.datetime.now().strftime("stock_data/%Y-%m-%d")
-batches = []
-count = 0
-while 100*count < len(stock_list):
-    stock_list[100*count:100*(count+1)]
-    count+=1
 
-data = {}
-for batch in batches:
-    batch_string = ""
-    for b in batch:
-        batch_string += b.ticker + ","
-    batch_string.rstrip()
-    r = requests.get('https://api.iextrading.com/1.0/stock/market/batch?symbols='
-        +batch_string+
-        '&range=1d&types=quote,news,chart'
-    )
-    for k,v in r.json().items():
-        data[k] = v
+data_file = Path("./stock_list.pickle")
+if not data_file.is_file() or True:
+    batches = []
+    count = 0
+    while 100*count < len(stock_list):
+        batches.append(stock_list[100*count:100*(count+1)])
+        count+=1
 
-with open(filename, "wb") as f:
-    pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+    data = {}
+    for batch in tqdm(batches, desc="Downloading stock data"):
+        batch_string = ""
+        for b in batch:
+            batch_string += b.ticker + ","
+        batch_string.rstrip()
+        r = requests.get('https://api.iextrading.com/1.0/stock/market/batch?symbols='
+            +batch_string+
+            '&range=1d&types=quote,news,chart'
+        )
+        for k,v in r.json().items():
+            data[k] = v
+        time.sleep(.1)
+
+    with open(filename, "wb") as f:
+        pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+else:
+    print("FILE ALREADY EXISTS")
