@@ -2,6 +2,8 @@
 bin
 include
 pip-selfcheck.json
+man
+stock_data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -105,4 +107,3 @@ ENV/
 # mypy
 .mypy_cache/
 
-stock_data

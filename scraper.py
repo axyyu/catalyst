@@ -92,7 +92,7 @@ if not data_file.is_file() or True:
         )
         for k,v in r.json().items():
             data[k] = v
-        time.sleep(.1)
+        time.sleep(1)
 
     with gzip.open(filename, "wb") as f:
         pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)

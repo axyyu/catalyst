@@ -10,3 +10,7 @@ six==1.11.0
 TA-Lib==0.4.16
 tqdm==4.19.6
 urllib3==1.22
+SQLAlchemy==1.2.5
+matplotlib==2.2.2
+psycopg2==2.7.4
+tqdm==4.19.8
