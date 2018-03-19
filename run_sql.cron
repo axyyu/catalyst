@@ -1,0 +1,1 @@
+30 23 * * 1-5 /usr/bin/python3 scraper_sql.py
